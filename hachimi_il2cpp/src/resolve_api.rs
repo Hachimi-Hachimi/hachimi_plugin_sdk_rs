@@ -1,0 +1,270 @@
+/* generated for 2022.3.20f1 */
+#![allow(non_upper_case_globals)]
+
+use std::ffi::CStr;
+
+use crate::types::*;
+
+pub trait SymbolResolver {
+    fn il2cpp_resolve_symbol(&self, name: &CStr) -> usize;
+}
+
+macro_rules! c_stringify {
+    ($x:ident) => {
+        const {
+            let bytes = concat!(stringify!($x), "\0").as_bytes();
+            match ::core::ffi::CStr::from_bytes_with_nul(bytes) {
+                Ok(cstr) => cstr,
+                Err(_) => unreachable!(),
+            }
+        }
+    }
+}
+
+macro_rules! define_fn {
+    ($name:tt, $ret:ty, $($v:ident: $t:ty),*) => {
+        pub fn $name(resolver: &impl SymbolResolver) -> Option<extern "C" fn($($v: $t),*) -> $ret> {
+            unsafe { std::mem::transmute(resolver.il2cpp_resolve_symbol(c_stringify!($name))) }
+        }
+    }
+}
+
+define_fn!(il2cpp_init, ::std::os::raw::c_int, domain_name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_init_utf16, ::std::os::raw::c_int, domain_name: *const Il2CppChar);
+define_fn!(il2cpp_shutdown, (), );
+define_fn!(il2cpp_set_config_dir, (), config_path: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_data_dir, (), data_path: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_temp_dir, (), temp_path: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_commandline_arguments, (), argc: ::std::os::raw::c_int, argv: *const *const ::std::os::raw::c_char, basedir: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_commandline_arguments_utf16, (), argc: ::std::os::raw::c_int, argv: *const *const Il2CppChar, basedir: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_config_utf16, (), executablePath: *const Il2CppChar);
+define_fn!(il2cpp_set_config, (), executablePath: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_set_memory_callbacks, (), callbacks: *mut Il2CppMemoryCallbacks);
+define_fn!(il2cpp_get_corlib, *const Il2CppImage, );
+define_fn!(il2cpp_add_internal_call, (), name: *const ::std::os::raw::c_char, method: Il2CppMethodPointer);
+define_fn!(il2cpp_resolve_icall, Il2CppMethodPointer, name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_alloc, *mut ::std::os::raw::c_void, size: usize);
+define_fn!(il2cpp_free, (), ptr: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_array_class_get, *mut Il2CppClass, element_class: *mut Il2CppClass, rank: u32);
+define_fn!(il2cpp_array_length, u32, array: *mut Il2CppArray);
+define_fn!(il2cpp_array_get_byte_length, u32, array: *mut Il2CppArray);
+define_fn!(il2cpp_array_new, *mut Il2CppArray, elementTypeInfo: *mut Il2CppClass, length: il2cpp_array_size_t);
+define_fn!(il2cpp_array_new_specific, *mut Il2CppArray, arrayTypeInfo: *mut Il2CppClass, length: il2cpp_array_size_t);
+define_fn!(il2cpp_array_new_full, *mut Il2CppArray, array_class: *mut Il2CppClass, lengths: *mut il2cpp_array_size_t, lower_bounds: *mut il2cpp_array_size_t);
+define_fn!(il2cpp_bounded_array_class_get, *mut Il2CppClass, element_class: *mut Il2CppClass, rank: u32, bounded: bool);
+define_fn!(il2cpp_array_element_size, ::std::os::raw::c_int, array_class: *const Il2CppClass);
+define_fn!(il2cpp_assembly_get_image, *const Il2CppImage, assembly: *const Il2CppAssembly);
+define_fn!(il2cpp_class_for_each, (), klassReportFunc: ::std::option::Option< unsafe extern "C" fn(klass: *mut Il2CppClass, userData: *mut ::std::os::raw::c_void), >, userData: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_enum_basetype, *const Il2CppType, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_is_inited, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_generic, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_inflated, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_assignable_from, bool, klass: *mut Il2CppClass, oklass: *mut Il2CppClass);
+define_fn!(il2cpp_class_is_subclass_of, bool, klass: *mut Il2CppClass, klassc: *mut Il2CppClass, check_interfaces: bool);
+define_fn!(il2cpp_class_has_parent, bool, klass: *mut Il2CppClass, klassc: *mut Il2CppClass);
+define_fn!(il2cpp_class_from_il2cpp_type, *mut Il2CppClass, type_: *const Il2CppType);
+define_fn!(il2cpp_class_from_name, *mut Il2CppClass, image: *const Il2CppImage, namespaze: *const ::std::os::raw::c_char, name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_class_from_system_type, *mut Il2CppClass, type_: *mut Il2CppReflectionType);
+define_fn!(il2cpp_class_get_element_class, *mut Il2CppClass, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_get_events, *const EventInfo, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_fields, *mut FieldInfo, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_nested_types, *mut Il2CppClass, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_interfaces, *mut Il2CppClass, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_properties, *const PropertyInfo, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_property_from_name, *const PropertyInfo, klass: *mut Il2CppClass, name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_class_get_field_from_name, *mut FieldInfo, klass: *mut Il2CppClass, name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_class_get_methods, *const MethodInfo, klass: *mut Il2CppClass, iter: *mut *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_method_from_name, *const MethodInfo, klass: *mut Il2CppClass, name: *const ::std::os::raw::c_char, argsCount: ::std::os::raw::c_int);
+define_fn!(il2cpp_class_get_name, *const ::std::os::raw::c_char, klass: *mut Il2CppClass);
+define_fn!(il2cpp_type_get_name_chunked, (), type_: *const Il2CppType, chunkReportFunc: ::std::option::Option< unsafe extern "C" fn( data: *mut ::std::os::raw::c_void, userData: *mut ::std::os::raw::c_void, ), >, userData: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_namespace, *const ::std::os::raw::c_char, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_get_parent, *mut Il2CppClass, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_get_declaring_type, *mut Il2CppClass, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_instance_size, i32, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_num_fields, usize, enumKlass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_valuetype, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_value_size, i32, klass: *mut Il2CppClass, align: *mut u32);
+define_fn!(il2cpp_class_is_blittable, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_flags, ::std::os::raw::c_int, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_abstract, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_is_interface, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_array_element_size, ::std::os::raw::c_int, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_from_type, *mut Il2CppClass, type_: *const Il2CppType);
+define_fn!(il2cpp_class_get_type, *const Il2CppType, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_get_type_token, u32, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_has_attribute, bool, klass: *mut Il2CppClass, attr_class: *mut Il2CppClass);
+define_fn!(il2cpp_class_has_references, bool, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_is_enum, bool, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_image, *const Il2CppImage, klass: *mut Il2CppClass);
+define_fn!(il2cpp_class_get_assemblyname, *const ::std::os::raw::c_char, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_rank, ::std::os::raw::c_int, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_data_size, u32, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_static_field_data, *mut ::std::os::raw::c_void, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_bitmap_size, usize, klass: *const Il2CppClass);
+define_fn!(il2cpp_class_get_bitmap, (), klass: *mut Il2CppClass, bitmap: *mut usize);
+define_fn!(il2cpp_stats_dump_to_file, bool, path: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_stats_get_value, u64, stat: Il2CppStat);
+define_fn!(il2cpp_domain_get, *mut Il2CppDomain, );
+define_fn!(il2cpp_domain_assembly_open, *const Il2CppAssembly, domain: *mut Il2CppDomain, name: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_domain_get_assemblies, *mut *const Il2CppAssembly, domain: *const Il2CppDomain, size: *mut usize);
+define_fn!(il2cpp_raise_exception, !, arg1: *mut Il2CppException);
+define_fn!(il2cpp_exception_from_name_msg, *mut Il2CppException, image: *const Il2CppImage, name_space: *const ::std::os::raw::c_char, name: *const ::std::os::raw::c_char, msg: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_get_exception_argument_null, *mut Il2CppException, arg: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_format_exception, (), ex: *const Il2CppException, message: *mut ::std::os::raw::c_char, message_size: ::std::os::raw::c_int);
+define_fn!(il2cpp_format_stack_trace, (), ex: *const Il2CppException, output: *mut ::std::os::raw::c_char, output_size: ::std::os::raw::c_int);
+define_fn!(il2cpp_unhandled_exception, (), arg1: *mut Il2CppException);
+define_fn!(il2cpp_native_stack_trace, (), ex: *const Il2CppException, addresses: *mut *mut usize, numFrames: *mut ::std::os::raw::c_int, imageUUID: *mut *mut ::std::os::raw::c_char, imageName: *mut *mut ::std::os::raw::c_char);
+define_fn!(il2cpp_field_get_flags, ::std::os::raw::c_int, field: *mut FieldInfo);
+define_fn!(il2cpp_field_get_name, *const ::std::os::raw::c_char, field: *mut FieldInfo);
+define_fn!(il2cpp_field_get_parent, *mut Il2CppClass, field: *mut FieldInfo);
+define_fn!(il2cpp_field_get_offset, usize, field: *mut FieldInfo);
+define_fn!(il2cpp_field_get_type, *const Il2CppType, field: *mut FieldInfo);
+define_fn!(il2cpp_field_get_value, (), obj: *mut Il2CppObject, field: *mut FieldInfo, value: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_field_get_value_object, *mut Il2CppObject, field: *mut FieldInfo, obj: *mut Il2CppObject);
+define_fn!(il2cpp_field_has_attribute, bool, field: *mut FieldInfo, attr_class: *mut Il2CppClass);
+define_fn!(il2cpp_field_set_value, (), obj: *mut Il2CppObject, field: *mut FieldInfo, value: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_field_static_get_value, (), field: *mut FieldInfo, value: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_field_static_set_value, (), field: *mut FieldInfo, value: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_field_set_value_object, (), instance: *mut Il2CppObject, field: *mut FieldInfo, value: *mut Il2CppObject);
+define_fn!(il2cpp_field_is_literal, bool, field: *mut FieldInfo);
+define_fn!(il2cpp_gc_collect, (), maxGenerations: ::std::os::raw::c_int);
+define_fn!(il2cpp_gc_collect_a_little, i32, );
+define_fn!(il2cpp_gc_start_incremental_collection, (), );
+define_fn!(il2cpp_gc_disable, (), );
+define_fn!(il2cpp_gc_enable, (), );
+define_fn!(il2cpp_gc_is_disabled, bool, );
+define_fn!(il2cpp_gc_set_mode, (), mode: Il2CppGCMode);
+define_fn!(il2cpp_gc_get_max_time_slice_ns, i64, );
+define_fn!(il2cpp_gc_set_max_time_slice_ns, (), maxTimeSlice: i64);
+define_fn!(il2cpp_gc_is_incremental, bool, );
+define_fn!(il2cpp_gc_get_used_size, i64, );
+define_fn!(il2cpp_gc_get_heap_size, i64, );
+define_fn!(il2cpp_gc_wbarrier_set_field, (), obj: *mut Il2CppObject, targetAddress: *mut *mut ::std::os::raw::c_void, object: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_gc_has_strict_wbarriers, bool, );
+define_fn!(il2cpp_gc_set_external_allocation_tracker, (), func: ::std::option::Option< unsafe extern "C" fn( arg1: *mut ::std::os::raw::c_void, arg2: usize, arg3: ::std::os::raw::c_int, ), >);
+define_fn!(il2cpp_gc_set_external_wbarrier_tracker, (), func: ::std::option::Option<unsafe extern "C" fn(arg1: *mut *mut ::std::os::raw::c_void)>);
+define_fn!(il2cpp_gc_foreach_heap, (), func: ::std::option::Option< unsafe extern "C" fn( data: *mut ::std::os::raw::c_void, userData: *mut ::std::os::raw::c_void, ), >, userData: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_stop_gc_world, (), );
+define_fn!(il2cpp_start_gc_world, (), );
+define_fn!(il2cpp_gc_alloc_fixed, *mut ::std::os::raw::c_void, size: usize);
+define_fn!(il2cpp_gc_free_fixed, (), address: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_gchandle_new, u32, obj: *mut Il2CppObject, pinned: bool);
+define_fn!(il2cpp_gchandle_new_weakref, u32, obj: *mut Il2CppObject, track_resurrection: bool);
+define_fn!(il2cpp_gchandle_get_target, *mut Il2CppObject, gchandle: u32);
+define_fn!(il2cpp_gchandle_free, (), gchandle: u32);
+define_fn!(il2cpp_gchandle_foreach_get_target, (), func: ::std::option::Option< unsafe extern "C" fn( data: *mut ::std::os::raw::c_void, userData: *mut ::std::os::raw::c_void, ), >, userData: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_object_header_size, u32, );
+define_fn!(il2cpp_array_object_header_size, u32, );
+define_fn!(il2cpp_offset_of_array_length_in_array_object_header, u32, );
+define_fn!(il2cpp_offset_of_array_bounds_in_array_object_header, u32, );
+define_fn!(il2cpp_allocation_granularity, u32, );
+define_fn!(il2cpp_unity_liveness_allocate_struct, *mut ::std::os::raw::c_void, filter: *mut Il2CppClass, max_object_count: ::std::os::raw::c_int, callback: il2cpp_register_object_callback, userdata: *mut ::std::os::raw::c_void, reallocate: il2cpp_liveness_reallocate_callback);
+define_fn!(il2cpp_unity_liveness_calculation_from_root, (), root: *mut Il2CppObject, state: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_unity_liveness_calculation_from_statics, (), state: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_unity_liveness_finalize, (), state: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_unity_liveness_free_struct, (), state: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_method_get_return_type, *const Il2CppType, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_declaring_type, *mut Il2CppClass, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_name, *const ::std::os::raw::c_char, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_from_reflection, *const MethodInfo, method: *const Il2CppReflectionMethod);
+define_fn!(il2cpp_method_get_object, *mut Il2CppReflectionMethod, method: *const MethodInfo, refclass: *mut Il2CppClass);
+define_fn!(il2cpp_method_is_generic, bool, method: *const MethodInfo);
+define_fn!(il2cpp_method_is_inflated, bool, method: *const MethodInfo);
+define_fn!(il2cpp_method_is_instance, bool, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_param_count, u32, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_param, *const Il2CppType, method: *const MethodInfo, index: u32);
+define_fn!(il2cpp_method_get_class, *mut Il2CppClass, method: *const MethodInfo);
+define_fn!(il2cpp_method_has_attribute, bool, method: *const MethodInfo, attr_class: *mut Il2CppClass);
+define_fn!(il2cpp_method_get_flags, u32, method: *const MethodInfo, iflags: *mut u32);
+define_fn!(il2cpp_method_get_token, u32, method: *const MethodInfo);
+define_fn!(il2cpp_method_get_param_name, *const ::std::os::raw::c_char, method: *const MethodInfo, index: u32);
+define_fn!(il2cpp_profiler_install, (), prof: *mut Il2CppProfiler, shutdown_callback: Il2CppProfileFunc);
+define_fn!(il2cpp_profiler_set_events, (), events: Il2CppProfileFlags);
+define_fn!(il2cpp_profiler_install_enter_leave, (), enter: Il2CppProfileMethodFunc, fleave: Il2CppProfileMethodFunc);
+define_fn!(il2cpp_profiler_install_allocation, (), callback: Il2CppProfileAllocFunc);
+define_fn!(il2cpp_profiler_install_gc, (), callback: Il2CppProfileGCFunc, heap_resize_callback: Il2CppProfileGCResizeFunc);
+define_fn!(il2cpp_profiler_install_fileio, (), callback: Il2CppProfileFileIOFunc);
+define_fn!(il2cpp_profiler_install_thread, (), start: Il2CppProfileThreadFunc, end: Il2CppProfileThreadFunc);
+define_fn!(il2cpp_property_get_flags, u32, prop: *mut PropertyInfo);
+define_fn!(il2cpp_property_get_get_method, *const MethodInfo, prop: *mut PropertyInfo);
+define_fn!(il2cpp_property_get_set_method, *const MethodInfo, prop: *mut PropertyInfo);
+define_fn!(il2cpp_property_get_name, *const ::std::os::raw::c_char, prop: *mut PropertyInfo);
+define_fn!(il2cpp_property_get_parent, *mut Il2CppClass, prop: *mut PropertyInfo);
+define_fn!(il2cpp_object_get_class, *mut Il2CppClass, obj: *mut Il2CppObject);
+define_fn!(il2cpp_object_get_size, u32, obj: *mut Il2CppObject);
+define_fn!(il2cpp_object_get_virtual_method, *const MethodInfo, obj: *mut Il2CppObject, method: *const MethodInfo);
+define_fn!(il2cpp_object_new, *mut Il2CppObject, klass: *const Il2CppClass);
+define_fn!(il2cpp_object_unbox, *mut ::std::os::raw::c_void, obj: *mut Il2CppObject);
+define_fn!(il2cpp_value_box, *mut Il2CppObject, klass: *mut Il2CppClass, data: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_monitor_enter, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_monitor_try_enter, bool, obj: *mut Il2CppObject, timeout: u32);
+define_fn!(il2cpp_monitor_exit, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_monitor_pulse, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_monitor_pulse_all, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_monitor_wait, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_monitor_try_wait, bool, obj: *mut Il2CppObject, timeout: u32);
+define_fn!(il2cpp_runtime_invoke, *mut Il2CppObject, method: *const MethodInfo, obj: *mut ::std::os::raw::c_void, params: *mut *mut ::std::os::raw::c_void, exc: *mut *mut Il2CppException);
+define_fn!(il2cpp_runtime_invoke_convert_args, *mut Il2CppObject, method: *const MethodInfo, obj: *mut ::std::os::raw::c_void, params: *mut *mut Il2CppObject, paramCount: ::std::os::raw::c_int, exc: *mut *mut Il2CppException);
+define_fn!(il2cpp_runtime_class_init, (), klass: *mut Il2CppClass);
+define_fn!(il2cpp_runtime_object_init, (), obj: *mut Il2CppObject);
+define_fn!(il2cpp_runtime_object_init_exception, (), obj: *mut Il2CppObject, exc: *mut *mut Il2CppException);
+define_fn!(il2cpp_runtime_unhandled_exception_policy_set, (), value: Il2CppRuntimeUnhandledExceptionPolicy);
+define_fn!(il2cpp_string_length, i32, str_: *mut Il2CppString);
+define_fn!(il2cpp_string_chars, *mut Il2CppChar, str_: *mut Il2CppString);
+define_fn!(il2cpp_string_new, *mut Il2CppString, str_: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_string_new_len, *mut Il2CppString, str_: *const ::std::os::raw::c_char, length: u32);
+define_fn!(il2cpp_string_new_utf16, *mut Il2CppString, text: *const Il2CppChar, len: i32);
+define_fn!(il2cpp_string_new_wrapper, *mut Il2CppString, str_: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_string_intern, *mut Il2CppString, str_: *mut Il2CppString);
+define_fn!(il2cpp_string_is_interned, *mut Il2CppString, str_: *mut Il2CppString);
+define_fn!(il2cpp_thread_current, *mut Il2CppThread, );
+define_fn!(il2cpp_thread_attach, *mut Il2CppThread, domain: *mut Il2CppDomain);
+define_fn!(il2cpp_thread_detach, (), thread: *mut Il2CppThread);
+define_fn!(il2cpp_thread_get_all_attached_threads, *mut *mut Il2CppThread, size: *mut usize);
+define_fn!(il2cpp_is_vm_thread, bool, thread: *mut Il2CppThread);
+define_fn!(il2cpp_current_thread_walk_frame_stack, (), func: Il2CppFrameWalkFunc, user_data: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_thread_walk_frame_stack, (), thread: *mut Il2CppThread, func: Il2CppFrameWalkFunc, user_data: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_current_thread_get_top_frame, bool, frame: *mut Il2CppStackFrameInfo);
+define_fn!(il2cpp_thread_get_top_frame, bool, thread: *mut Il2CppThread, frame: *mut Il2CppStackFrameInfo);
+define_fn!(il2cpp_current_thread_get_frame_at, bool, offset: i32, frame: *mut Il2CppStackFrameInfo);
+define_fn!(il2cpp_thread_get_frame_at, bool, thread: *mut Il2CppThread, offset: i32, frame: *mut Il2CppStackFrameInfo);
+define_fn!(il2cpp_current_thread_get_stack_depth, i32, );
+define_fn!(il2cpp_thread_get_stack_depth, i32, thread: *mut Il2CppThread);
+define_fn!(il2cpp_override_stack_backtrace, (), stackBacktraceFunc: Il2CppBacktraceFunc);
+define_fn!(il2cpp_type_get_object, *mut Il2CppObject, type_: *const Il2CppType);
+define_fn!(il2cpp_type_get_type, ::std::os::raw::c_int, type_: *const Il2CppType);
+define_fn!(il2cpp_type_get_class_or_element_class, *mut Il2CppClass, type_: *const Il2CppType);
+define_fn!(il2cpp_type_get_name, *mut ::std::os::raw::c_char, type_: *const Il2CppType);
+define_fn!(il2cpp_type_is_byref, bool, type_: *const Il2CppType);
+define_fn!(il2cpp_type_get_attrs, u32, type_: *const Il2CppType);
+define_fn!(il2cpp_type_equals, bool, type_: *const Il2CppType, otherType: *const Il2CppType);
+define_fn!(il2cpp_type_get_assembly_qualified_name, *mut ::std::os::raw::c_char, type_: *const Il2CppType);
+define_fn!(il2cpp_type_get_reflection_name, *mut ::std::os::raw::c_char, type_: *const Il2CppType);
+define_fn!(il2cpp_type_is_static, bool, type_: *const Il2CppType);
+define_fn!(il2cpp_type_is_pointer_type, bool, type_: *const Il2CppType);
+define_fn!(il2cpp_image_get_assembly, *const Il2CppAssembly, image: *const Il2CppImage);
+define_fn!(il2cpp_image_get_name, *const ::std::os::raw::c_char, image: *const Il2CppImage);
+define_fn!(il2cpp_image_get_filename, *const ::std::os::raw::c_char, image: *const Il2CppImage);
+define_fn!(il2cpp_image_get_entry_point, *const MethodInfo, image: *const Il2CppImage);
+define_fn!(il2cpp_image_get_class_count, usize, image: *const Il2CppImage);
+define_fn!(il2cpp_image_get_class, *const Il2CppClass, image: *const Il2CppImage, index: usize);
+define_fn!(il2cpp_capture_memory_snapshot, *mut Il2CppManagedMemorySnapshot, );
+define_fn!(il2cpp_free_captured_memory_snapshot, (), snapshot: *mut Il2CppManagedMemorySnapshot);
+define_fn!(il2cpp_set_find_plugin_callback, (), method: Il2CppSetFindPlugInCallback);
+define_fn!(il2cpp_register_log_callback, (), method: Il2CppLogCallback);
+define_fn!(il2cpp_debugger_set_agent_options, (), options: *const ::std::os::raw::c_char);
+define_fn!(il2cpp_is_debugger_attached, bool, );
+define_fn!(il2cpp_register_debugger_agent_transport, (), debuggerTransport: *mut Il2CppDebuggerTransport);
+define_fn!(il2cpp_debug_get_method_info, bool, arg1: *const MethodInfo, methodDebugInfo: *mut Il2CppMethodDebugInfo);
+define_fn!(il2cpp_unity_install_unitytls_interface, (), unitytlsInterfaceStruct: *const ::std::os::raw::c_void);
+define_fn!(il2cpp_custom_attrs_from_class, *mut Il2CppCustomAttrInfo, klass: *mut Il2CppClass);
+define_fn!(il2cpp_custom_attrs_from_method, *mut Il2CppCustomAttrInfo, method: *const MethodInfo);
+define_fn!(il2cpp_custom_attrs_from_field, *mut Il2CppCustomAttrInfo, field: *const FieldInfo);
+define_fn!(il2cpp_custom_attrs_get_attr, *mut Il2CppObject, ainfo: *mut Il2CppCustomAttrInfo, attr_klass: *mut Il2CppClass);
+define_fn!(il2cpp_custom_attrs_has_attr, bool, ainfo: *mut Il2CppCustomAttrInfo, attr_klass: *mut Il2CppClass);
+define_fn!(il2cpp_custom_attrs_construct, *mut Il2CppArray, cinfo: *mut Il2CppCustomAttrInfo);
+define_fn!(il2cpp_custom_attrs_free, (), ainfo: *mut Il2CppCustomAttrInfo);
+define_fn!(il2cpp_class_set_userdata, (), klass: *mut Il2CppClass, userdata: *mut ::std::os::raw::c_void);
+define_fn!(il2cpp_class_get_userdata_offset, ::std::os::raw::c_int, );
+define_fn!(il2cpp_set_default_thread_affinity, (), affinity_mask: i64);
+define_fn!(il2cpp_unity_set_android_network_up_state_func, (), func: Il2CppAndroidUpStateFunc);

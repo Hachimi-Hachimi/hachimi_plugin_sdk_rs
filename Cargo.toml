@@ -1,0 +1,25 @@
+[package]
+name = "hachimi_plugin_sdk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+hachimi_plugin_macros = { path = "./hachimi_plugin_macros", version = "*", optional = true }
+hachimi_il2cpp = { path = "./hachimi_il2cpp", version = "*", optional = true }
+hachimi_il2cpp_2020 = { path = "./hachimi_il2cpp_2020", version = "*", optional = true }
+
+[features]
+default = ["macros"]
+macros = ["dep:hachimi_plugin_macros"]
+il2cpp_api = []
+il2cpp = ["il2cpp_api", "dep:hachimi_il2cpp"]
+il2cpp_2020 = ["il2cpp_api", "dep:hachimi_il2cpp_2020"]
+
+[workspace]
+resolver = "3"
+members = [
+    "hachimi_plugin_macros",
+    "hachimi_il2cpp",
+    "hachimi_il2cpp_2020",
+    "examples/*"
+]

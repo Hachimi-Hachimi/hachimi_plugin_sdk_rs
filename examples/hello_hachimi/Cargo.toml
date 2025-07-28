@@ -1,0 +1,10 @@
+[package]
+name = "hello_hachimi"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+hachimi_plugin_sdk = { path = "../..", version = "*", features = ["il2cpp_2020"] }
