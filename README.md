@@ -1,5 +1,5 @@
 # Hachimi Plugin SDK for Rust
-This crate lets you develop a Hachimi plugin using Rust. Under the hood, it wraps the plugin system's C API.
+This crate lets you develop Hachimi plugins using Rust. Under the hood, it wraps the plugin system's C API.
 
 # Usage
 Make sure your library is configured to build as a `cdylib`, and use Rust edition 2021. Include this crate as a dependency in your project:
