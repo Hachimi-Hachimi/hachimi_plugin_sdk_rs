@@ -7,5 +7,10 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-hachimi_plugin_sdk = { path = "../..", version = "*", features = ["il2cpp_2020"] }
+hachimi_plugin_sdk = { path = "../..", version = "*" }
 log = "0.4"
+
+[features]
+default = ["il2cpp"]
+il2cpp = ["hachimi_plugin_sdk/il2cpp"]
+il2cpp_2020 = ["hachimi_plugin_sdk/il2cpp_2020"]
