@@ -1,4 +1,4 @@
-use hachimi_plugin_sdk::{api::{Hachimi, HachimiApi}, hachimi_plugin};
+use hachimi_plugin_sdk::{api::{Hachimi, HachimiApi}, hachimi_plugin, sys::InitResult};
 use log::info;
 
 static mut API: Option<HachimiApi> = None;
@@ -12,7 +12,7 @@ unsafe extern "C" fn push_dialog_hook() {
 }
 
 #[hachimi_plugin]
-pub fn main(api: HachimiApi) {
+pub fn main(api: HachimiApi, _version: i32) -> InitResult {
     unsafe { API = Some(api); }
     // Silently ignore log init errors
     _ = hachimi_plugin_sdk::log::init(api, log::Level::Info);
@@ -20,18 +20,21 @@ pub fn main(api: HachimiApi) {
     info!("Hello Hachimi!");
 
     let hachimi = Hachimi::instance(&api);
+    let il2cpp = api.il2cpp();
     let interceptor = hachimi.interceptor();
 
-    let image = api.il2cpp_get_assembly_image(c"umamusume.dll");
-    if image.is_null() { return };
+    let image = il2cpp.get_assembly_image(c"umamusume.dll");
+    if image.is_null() { return InitResult::Error; }
 
-    let class = api.il2cpp_get_class(image, c"Gallop", c"DialogTitleMenu");
-    if class.is_null() { return };
+    let class = il2cpp.get_class(image, c"Gallop", c"DialogTitleMenu");
+    if class.is_null() { return InitResult::Error; }
 
-    let push_dialog = api.il2cpp_get_method_addr(class, c"PushDialog", 0);
-    if push_dialog == 0 { return };
+    let push_dialog = il2cpp.get_method_addr(class, c"PushDialog", 0);
+    if push_dialog == 0 { return InitResult::Error; }
 
     if let Some(trampoline) = interceptor.hook(push_dialog, push_dialog_hook as _) {
         unsafe { PUSH_DIALOG_ORIG = trampoline; }
     }
+
+    InitResult::Ok
 }

@@ -16,8 +16,15 @@ pub fn hachimi_plugin(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
         // Generate the hachimi_init function
         #[no_mangle]
-        pub unsafe extern "C" fn hachimi_init(vtable: *mut hachimi_plugin_sdk::sys::Vtable) {
-            #fn_name(hachimi_plugin_sdk::api::HachimiApi::from_vtable(vtable))
+        pub unsafe extern "C" fn hachimi_init(
+            vtable: *mut hachimi_plugin_sdk::sys::Vtable,
+            version: i32
+        ) -> hachimi_plugin_sdk::sys::InitResult {
+            if version < hachimi_plugin_sdk::sys::VERSION {
+                return hachimi_plugin_sdk::sys::InitResult::Error;
+            }
+
+            #fn_name(hachimi_plugin_sdk::api::HachimiApi::from_vtable(vtable), version)
         }
     };
 
