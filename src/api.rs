@@ -37,6 +37,7 @@ impl HachimiApi {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct HachimiIl2CppApi<'a>(&'a HachimiApi);
 
 impl<'a> HachimiIl2CppApi<'a> {
@@ -163,9 +164,9 @@ impl<'a> HachimiIl2CppApi<'a> {
 }
 
 #[cfg(feature = "il2cpp_api")]
-impl crate::il2cpp::resolve_api::SymbolResolver for HachimiApi {
+impl<'a> crate::il2cpp::resolve_api::SymbolResolver for HachimiIl2CppApi<'a> {
     fn il2cpp_resolve_symbol(&self, name: &CStr) -> usize {
-        self.il2cpp().resolve_symbol(name)
+        self.resolve_symbol(name)
     }
 }
 
@@ -178,6 +179,7 @@ pub enum LogLevel {
     Trace
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Hachimi<'a> {
     api: &'a HachimiApi,
     ptr: *const sys::Hachimi
@@ -204,6 +206,7 @@ impl<'a> Hachimi<'a> {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub struct Interceptor<'a> {
     api: &'a HachimiApi,
     ptr: *const sys::Interceptor
