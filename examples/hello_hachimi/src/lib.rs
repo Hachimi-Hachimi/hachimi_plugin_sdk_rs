@@ -12,7 +12,7 @@ unsafe extern "C" fn push_dialog_hook() {
 }
 
 #[hachimi_plugin]
-pub fn main(api: HachimiApi, _version: i32) -> InitResult {
+pub fn main(api: HachimiApi) -> InitResult {
     unsafe { API = Some(api); }
     // Silently ignore log init errors
     _ = hachimi_plugin_sdk::log::init(api, log::Level::Info);

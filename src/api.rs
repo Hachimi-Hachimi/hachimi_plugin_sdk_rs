@@ -7,19 +7,25 @@ use crate::sys;
 
 #[derive(Debug, Clone, Copy)]
 pub struct HachimiApi {
-    vtable: sys::Vtable
+    vtable: sys::Vtable,
+    version: i32
 }
 
 impl HachimiApi {
-    pub unsafe fn from_vtable(vtable: *mut sys::Vtable) -> Self {
+    pub unsafe fn new(vtable: *mut sys::Vtable, version: i32) -> Self {
         let vtable = (*vtable).clone();
         Self {
-            vtable
+            vtable,
+            version
         }
     }
 
     pub fn vtable(&self) -> &sys::Vtable {
         &self.vtable
+    }
+
+    pub fn version(&self) -> i32 {
+        self.version
     }
 
     pub fn log(&self, level: LogLevel, target: &CStr, message: &CStr) {

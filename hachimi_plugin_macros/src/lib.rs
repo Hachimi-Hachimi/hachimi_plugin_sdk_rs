@@ -24,7 +24,7 @@ pub fn hachimi_plugin(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 return hachimi_plugin_sdk::sys::InitResult::Error;
             }
 
-            #fn_name(hachimi_plugin_sdk::api::HachimiApi::from_vtable(vtable), version)
+            #fn_name(hachimi_plugin_sdk::api::HachimiApi::new(vtable, version))
         }
     };
 
