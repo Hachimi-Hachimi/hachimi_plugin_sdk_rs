@@ -7,6 +7,7 @@ edition = "2021"
 hachimi_plugin_macros = { path = "./hachimi_plugin_macros", version = "*", optional = true }
 hachimi_il2cpp = { path = "./hachimi_il2cpp", version = "*", optional = true }
 hachimi_il2cpp_2020 = { path = "./hachimi_il2cpp_2020", version = "*", optional = true }
+log = { version = "0.4", features = ["std"] }
 
 [features]
 default = ["macros"]

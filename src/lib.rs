@@ -1,5 +1,6 @@
 pub mod api;
 pub mod sys;
+pub mod log;
 
 #[cfg(feature = "macros")]
 pub use hachimi_plugin_macros::hachimi_plugin;
